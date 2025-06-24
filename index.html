@@ -92,16 +92,55 @@
       color: #444;
     }
     .screenshots {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
       margin-top: 2rem;
+      position: relative;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .screenshots img {
+    .carousel {
+      overflow: hidden;
+    }
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .carousel-inner img {
       width: 100%;
-      aspect-ratio: 9 / 19.5;
+      flex: 0 0 100%;
       border-radius: 12px;
       box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.3); /* Полупрозрачный фон */
+      border: none;
+      border-radius: 50%; /* Круглая форма */
+      width: 40px;
+      height: 40px;
+      color: #000;
+      font-size: 1.5rem;
+      cursor: pointer;
+      backdrop-filter: blur(5px); /* Эффект "Liquid Glass" */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.3); /* Тень и внутренний блеск */
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .carousel-btn:hover {
+      background: rgba(255, 255, 255, 0.5);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .prev {
+      left: 10px;
+    }
+    .next {
+      right: 10px;
+    }
+    @media (max-width: 768px) {
+      .carousel-inner img {
+        width: 100%; /* Полная ширина на мобильных */
+      }
     }
     .contact {
       text-align: center;
@@ -168,9 +207,15 @@
     </div>
 
     <div class="screenshots">
-      <img src="images/screenshot1.jpg" alt="Экран 1">
-      <img src="images/screenshot2.jpg" alt="Экран 2">
-      <img src="images/screenshot3.jpg" alt="Экран 3">
+      <div class="carousel">
+        <button class="carousel-btn prev" onclick="moveCarousel(-1)">❮</button>
+        <div class="carousel-inner">
+          <img src="images/screenshot1.jpg" alt="Экран 1">
+          <img src="images/screenshot2.jpg" alt="Экран 2">
+          <img src="images/screenshot3.jpg" alt="Экран 3">
+        </div>
+        <button class="carousel-btn next" onclick="moveCarousel(1)">❯</button>
+      </div>
     </div>
   </section>
 
@@ -196,5 +241,23 @@
   <footer>
     © 2025 AIO Chat. Все права защищены.
   </footer>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-inner img');
+    const totalSlides = slides.length;
+
+    function moveCarousel(direction) {
+      currentSlide += direction;
+      if (currentSlide < 0) currentSlide = totalSlides - 1;
+      if (currentSlide >= totalSlides) currentSlide = 0;
+      updateCarousel();
+    }
+
+    function updateCarousel() {
+      const offset = -currentSlide * 100;
+      document.querySelector('.carousel-inner').style.transform = `translateX(${offset}%)`;
+    }
+  </script>
 </body>
 </html>
