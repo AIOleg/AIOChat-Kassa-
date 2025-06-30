@@ -126,6 +126,7 @@
       display: flex;
       flex-direction: row;
       transition: transform 0.5s ease-in-out;
+      width: fit-content;
     }
     .carousel-inner img {
       width: 100%;
@@ -564,15 +565,48 @@
     const slideWidth = slides[0] ? slides[0].clientWidth + 8 : 200;
     let currentFullscreenIndex = 0;
 
-    function moveCarousel(direction) {
-      currentSlide = (currentSlide + direction * slidesPerRow) % totalSlides;
-      if (currentSlide < 0) currentSlide = totalSlides - slidesPerRow;
-      updateCarousel();
+    // Clone images for infinite scroll
+    function initializeCarousel() {
+      const carouselInner = document.querySelector('.carousel-inner');
+      // Clone first and last set of slides
+      for (let i = 0; i < slidesPerRow; i++) {
+        const firstClone = slides[i % totalSlides].cloneNode(true);
+        const lastClone = slides[totalSlides - 1 - (i % totalSlides)].cloneNode(true);
+        carouselInner.appendChild(firstClone);
+        carouselInner.insertBefore(lastClone, carouselInner.firstChild);
+      }
+      // Adjust initial position to start at the first real slide
+      currentSlide = slidesPerRow;
+      updateCarousel(false);
     }
 
-    function updateCarousel() {
-      const offset = -(currentSlide % totalSlides) * slideWidth;
-      document.querySelector('.carousel-inner').style.transform = `translateX(${offset}px)`;
+    function moveCarousel(direction) {
+      currentSlide += direction * slidesPerRow;
+      const totalClonedSlides = totalSlides + 2 * slidesPerRow;
+      
+      // Seamless loop logic
+      if (currentSlide >= totalSlides + slidesPerRow) {
+        currentSlide = slidesPerRow;
+        updateCarousel(false); // No transition for jump
+        setTimeout(() => updateCarousel(true), 0); // Re-apply transition
+      } else if (currentSlide < slidesPerRow) {
+        currentSlide = totalSlides;
+        updateCarousel(false); // No transition for jump
+        setTimeout(() => updateCarousel(true), 0); // Re-apply transition
+      } else {
+        updateCarousel(true);
+      }
+    }
+
+    function updateCarousel(useTransition = true) {
+      const carouselInner = document.querySelector('.carousel-inner');
+      if (!useTransition) {
+        carouselInner.style.transition = 'none';
+      } else {
+        carouselInner.style.transition = 'transform 0.5s ease-in-out';
+      }
+      const offset = -currentSlide * slideWidth;
+      carouselInner.style.transform = `translateX(${offset}px)`;
     }
 
     function scrollToSection(sectionId) {
@@ -589,11 +623,13 @@
     });
 
     document.addEventListener('DOMContentLoaded', () => {
-      updateCarousel();
-      slides.forEach((img, index) => {
+      initializeCarousel();
+      const allSlides = document.querySelectorAll('.carousel-inner img');
+      allSlides.forEach((img, index) => {
         img.addEventListener('click', () => {
-          currentFullscreenIndex = index;
-          openFullscreen(img.src);
+          currentFullscreenIndex = (index - slidesPerRow) % totalSlides;
+          if (currentFullscreenIndex < 0) currentFullscreenIndex += totalSlides;
+          openFullscreen(slides[currentFullscreenIndex].src);
         });
       });
       document.addEventListener('keydown', (e) => {
