@@ -64,6 +64,7 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
       backdrop-filter: blur(12px);
       transition: transform 0.3s ease;
+      scroll-margin-top: 100px; /* Базовое смещение */
     }
     section:hover {
       transform: translateY(-2px);
@@ -210,15 +211,15 @@
       transform: translateY(-50%) scale(1.1);
     }
     .prev-fullscreen {
-      left: 20px;
+      left: 30px; /* Ближе к изображению с запасом */
     }
     .next-fullscreen {
-      right: 20px;
+      right: 30px; /* Ближе к изображению с запасом */
     }
     .close-btn {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 30px; /* Ближе к изображению с запасом */
+      right: 30px; /* Ближе к изображению с запасом */
       background: rgba(255, 255, 255, 0.4);
       border: none;
       border-radius: 50%;
@@ -282,6 +283,9 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, background 0.3s ease;
     }
+    .download a:first-child {
+      padding: 0.75rem 2rem; /* Увеличена ширина для "Скачать для iOS" */
+    }
     .download a:hover {
       transform: translateY(-2px);
       background: rgba(255, 255, 255, 0.6);
@@ -324,6 +328,9 @@
         width: 80%;
         text-align: center;
       }
+      .download a:first-child {
+        padding: 0.75rem 1.5rem; /* Сброс ширины на мобильных */
+      }
     }
   </style>
 </head>
@@ -331,12 +338,12 @@
   <header>
     AIO Chat
     <nav>
-      <a href="#description">Описание</a>
-      <a href="#features">Возможности</a>
-      <a href="#subscription">Подписка</a>
-      <a href="#registration">Регистрация</a>
-      <a href="#contacts">Контакты</a>
-      <a href="#download">Скачать</a>
+      <a href="#description" onclick="scrollToSection('description')">Описание</a>
+      <a href="#features" onclick="scrollToSection('features')">Возможности</a>
+      <a href="#subscription" onclick="scrollToSection('subscription')">Подписка</a>
+      <a href="#registration" onclick="scrollToSection('registration')">Регистрация</a>
+      <a href="#contacts" onclick="scrollToSection('contacts')">Контакты</a>
+      <a href="#download" onclick="scrollToSection('download')">Скачать</a>
     </nav>
   </header>
 
@@ -467,14 +474,28 @@
     let currentFullscreenIndex = 0;
 
     function moveCarousel(direction) {
-      currentSlide += direction * slidesPerRow;
-      currentSlide = (currentSlide + totalSlides) % totalSlides; // Круговое перелистывание
+      const totalGroups = Math.ceil(totalSlides / slidesPerRow);
+      currentSlide = (currentSlide + direction * slidesPerRow) % (totalSlides);
+      if (currentSlide < 0) currentSlide = totalSlides - (totalSlides % slidesPerRow || slidesPerRow);
+      // Корректировка для начала группы
+      currentSlide = Math.floor(currentSlide / slidesPerRow) * slidesPerRow;
+      if (currentSlide >= totalSlides) currentSlide = 0;
       updateCarousel();
     }
 
     function updateCarousel() {
-      const offset = -currentSlide * (slideWidth / slidesPerRow); // Корректировка для четырех в ряд
+      const offset = -Math.floor(currentSlide / slidesPerRow) * (slideWidth * slidesPerRow);
       document.querySelector('.carousel-inner').style.transform = `translateX(${offset}px)`;
+    }
+
+    // Функция для прокрутки к секции с учетом header
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const headerHeight = document.querySelector('header').offsetHeight;
+        window.scrollBy(0, -headerHeight - 10); // Дополнительное смещение вверх на 10px
+      }
     }
 
     // Обновление при изменении размера окна
@@ -489,6 +510,20 @@
         img.addEventListener('click', () => {
           currentFullscreenIndex = index;
           openFullscreen(img.src);
+        });
+      });
+      document.addEventListener('keydown', (e) => {
+        if (document.getElementById('fullscreen-image').style.display === 'flex') {
+          if (e.key === 'ArrowLeft') moveFullscreen(-1);
+          if (e.key === 'ArrowRight') moveFullscreen(1);
+        }
+      });
+      // Обновление ссылок навигации
+      document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const sectionId = anchor.getAttribute('href').substring(1);
+          scrollToSection(sectionId);
         });
       });
     });
