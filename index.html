@@ -48,6 +48,7 @@
       padding: 0.5rem 1rem;
       border-radius: 12px;
       transition: transform 0.3s ease, color 0.3s ease, background 0.3s ease;
+      cursor: pointer;
     }
     nav a:hover {
       transform: scale(1.1);
@@ -64,7 +65,7 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
       backdrop-filter: blur(12px);
       transition: transform 0.3s ease;
-      scroll-margin-top: 100px; /* Базовое смещение */
+      scroll-margin-top: 120px; /* Увеличено для полного отображения заголовка */
     }
     section:hover {
       transform: translateY(-2px);
@@ -74,6 +75,7 @@
       font-weight: 600;
       margin-bottom: 1.5rem;
       color: #1a1a1a;
+      padding-top: 1rem; /* Дополнительный отступ сверху */
     }
     .features {
       display: grid;
@@ -110,7 +112,7 @@
     .screenshots {
       margin-top: 2rem;
       position: relative;
-      max-width: 100%; /* Адаптивная ширина */
+      max-width: 100%;
       margin-left: auto;
       margin-right: auto;
       margin-bottom: 2rem;
@@ -123,19 +125,20 @@
     .carousel-inner {
       display: flex;
       flex-direction: row;
-      transition: transform 0.5s ease-in-out; /* Плавное перелистывание */
+      transition: transform 0.5s ease-in-out;
     }
     .carousel-inner img {
       width: 100%;
-      max-width: 240px; /* Уменьшено на 20% с 300px */
+      max-width: 240px;
       height: auto;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       margin-right: 10px;
       transform: translateZ(0);
       backdrop-filter: blur(8px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Анимация при наведении и клике */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
+      flex-shrink: 0;
     }
     .carousel-inner img:hover {
       transform: scale(1.05);
@@ -180,10 +183,11 @@
       z-index: 1000;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
     }
     .fullscreen-image img {
-      max-width: 90%;
-      max-height: 90%;
+      max-width: 80%;
+      max-height: 80%;
       border-radius: 12px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(10px);
@@ -211,15 +215,15 @@
       transform: translateY(-50%) scale(1.1);
     }
     .prev-fullscreen {
-      left: 30px; /* Ближе к изображению с запасом */
+      left: calc(50% - 45% - 60px); /* Ближе к изображению */
     }
     .next-fullscreen {
-      right: 30px; /* Ближе к изображению с запасом */
+      right: calc(50% - 45% - 60px); /* Ближе к изображению */
     }
     .close-btn {
       position: absolute;
-      top: 30px; /* Ближе к изображению с запасом */
-      right: 30px; /* Ближе к изображению с запасом */
+      top: 20px;
+      right: calc(50% - 45% - 60px); /* Ближе к изображению */
       background: rgba(255, 255, 255, 0.4);
       border: none;
       border-radius: 50%;
@@ -273,7 +277,7 @@
     }
     .download a {
       display: inline-block;
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 2rem; /* Уравнена ширина */
       background: rgba(255, 255, 255, 0.4);
       border-radius: 12px;
       text-decoration: none;
@@ -282,9 +286,8 @@
       backdrop-filter: blur(8px);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, background 0.3s ease;
-    }
-    .download a:first-child {
-      padding: 0.75rem 2rem; /* Увеличена ширина для "Скачать для iOS" */
+      text-align: center;
+      min-width: 180px; /* Минимальная ширина для обеих кнопок */
     }
     .download a:hover {
       transform: translateY(-2px);
@@ -308,7 +311,7 @@
     }
     @media (max-width: 768px) {
       .carousel-inner img {
-        max-width: 120px; /* Уменьшено на 20% с 150px */
+        max-width: 120px;
       }
       .screenshots {
         max-width: 100%;
@@ -327,9 +330,7 @@
       .download a {
         width: 80%;
         text-align: center;
-      }
-      .download a:first-child {
-        padding: 0.75rem 1.5rem; /* Сброс ширины на мобильных */
+        min-width: unset;
       }
     }
   </style>
@@ -469,41 +470,34 @@
     let currentSlide = 0;
     const slides = document.querySelectorAll('.carousel-inner img');
     const totalSlides = slides.length;
-    const slidesPerRow = 4; // Четыре изображения в ряд
-    const slideWidth = slides[0].clientWidth + 10; // Учитываем margin-right
+    const slidesPerRow = 4;
+    const slideWidth = slides[0] ? slides[0].clientWidth + 10 : 250; // Учитываем margin-right, запасное значение
     let currentFullscreenIndex = 0;
 
     function moveCarousel(direction) {
-      const totalGroups = Math.ceil(totalSlides / slidesPerRow);
-      currentSlide = (currentSlide + direction * slidesPerRow) % (totalSlides);
-      if (currentSlide < 0) currentSlide = totalSlides - (totalSlides % slidesPerRow || slidesPerRow);
-      // Корректировка для начала группы
-      currentSlide = Math.floor(currentSlide / slidesPerRow) * slidesPerRow;
-      if (currentSlide >= totalSlides) currentSlide = 0;
+      currentSlide = (currentSlide + direction * slidesPerRow) % totalSlides;
+      if (currentSlide < 0) currentSlide = totalSlides - slidesPerRow;
       updateCarousel();
     }
 
     function updateCarousel() {
-      const offset = -Math.floor(currentSlide / slidesPerRow) * (slideWidth * slidesPerRow);
+      const offset = -(currentSlide % totalSlides) * slideWidth;
       document.querySelector('.carousel-inner').style.transform = `translateX(${offset}px)`;
     }
 
-    // Функция для прокрутки к секции с учетом header
     function scrollToSection(sectionId) {
       const section = document.getElementById(sectionId);
       if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         const headerHeight = document.querySelector('header').offsetHeight;
-        window.scrollBy(0, -headerHeight - 10); // Дополнительное смещение вверх на 10px
+        const sectionTop = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+        window.scrollTo({ top: sectionTop, behavior: 'smooth' });
       }
     }
 
-    // Обновление при изменении размера окна
     window.addEventListener('resize', () => {
       updateCarousel();
     });
 
-    // Инициализация
     document.addEventListener('DOMContentLoaded', () => {
       updateCarousel();
       slides.forEach((img, index) => {
@@ -516,15 +510,21 @@
         if (document.getElementById('fullscreen-image').style.display === 'flex') {
           if (e.key === 'ArrowLeft') moveFullscreen(-1);
           if (e.key === 'ArrowRight') moveFullscreen(1);
+          if (e.key === 'Escape') closeFullscreen();
         }
       });
-      // Обновление ссылок навигации
       document.querySelectorAll('nav a').forEach(anchor => {
         anchor.addEventListener('click', (e) => {
           e.preventDefault();
           const sectionId = anchor.getAttribute('href').substring(1);
           scrollToSection(sectionId);
         });
+      });
+      const fullscreen = document.getElementById('fullscreen-image');
+      fullscreen.addEventListener('click', (e) => {
+        if (e.target === fullscreen) {
+          closeFullscreen();
+        }
       });
     });
 
