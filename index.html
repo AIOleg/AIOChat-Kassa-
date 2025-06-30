@@ -239,7 +239,7 @@
     }
     .close-btn:hover {
       background: rgba(255, 255, 255, 0.6);
-      transform: scale(1.1);
+      transform: scale1.1);
     }
     .subscription-details {
       display: block;
@@ -286,7 +286,7 @@
       backdrop-filter: blur(8px);
       box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, background 0.3s ease;
-      text-align: center;
+      text-align: six items center;
       min-width: 200px;
     }
     .download a:hover {
@@ -317,9 +317,13 @@
       nav {
         gap: 0.5rem;
         font-size: 0.8rem;
+        justify-content: space-between;
       }
       nav a {
         padding: 0.3rem 0.6rem;
+        flex: 1 1 calc(33.33% - 0.33rem); /* Three items per row */
+        text-align: center;
+        max-width: calc(33.33% - 0.33rem);
       }
       section {
         margin: 1rem 0.5rem;
@@ -409,6 +413,8 @@
       }
       nav a {
         padding: 0.25rem 0.5rem;
+        flex: 1 1 calc(33.33% - 0.27rem); /* Adjusted for smaller gap */
+        max-width: calc(33.33% - 0.27rem);
       }
       section {
         margin: 0.8rem 0.4rem;
