@@ -126,14 +126,15 @@
     }
     .carousel-inner img {
       width: 100%;
-      max-width: 300px; /* Уменьшено в два раза с 600px */
+      max-width: 240px; /* Уменьшено на 20% с 300px */
       height: auto;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       margin-right: 10px;
       transform: translateZ(0);
       backdrop-filter: blur(8px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Анимация при наведении */
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Анимация при наведении и клике */
+      cursor: pointer;
     }
     .carousel-inner img:hover {
       transform: scale(1.05);
@@ -166,6 +167,46 @@
     }
     .next {
       right: 0;
+    }
+    .fullscreen-image {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .fullscreen-image img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.4);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: #000;
+      font-size: 1.5rem;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(1.1);
     }
     .subscription-details {
       display: block;
@@ -236,7 +277,7 @@
     }
     @media (max-width: 768px) {
       .carousel-inner img {
-        max-width: 150px; /* Уменьшено для мобильных */
+        max-width: 120px; /* Уменьшено на 20% с 150px */
       }
       .screenshots {
         max-width: 100%;
@@ -267,8 +308,8 @@
       <a href="#features">Возможности</a>
       <a href="#subscription">Подписка</a>
       <a href="#registration">Регистрация</a>
-      <a href="#contacts">Контакты</a>
       <a href="#download">Скачать</a>
+      <a href="#contacts">Контакты</a>
     </nav>
   </header>
 
@@ -365,12 +406,6 @@
     <p>Вход и регистрация доступны через Apple Account, Google, Яндекс и Email.</p>
   </section>
 
-  <section id="contacts">
-    <h2>Контакты</h2>
-    <p><a href="mailto:aioapp.helpdesk@gmail.com">aioapp.helpdesk@gmail.com</a></p>
-    <p>Пишите по любым вопросам - поможем оперативно.</p>
-  </section>
-
   <section id="download">
     <h2>Доступно для cкачивания</h2>
     <div class="download">
@@ -379,9 +414,20 @@
     </div>
   </section>
 
+  <section id="contacts">
+    <h2>Контакты</h2>
+    <p><a href="mailto:aioapp.helpdesk@gmail.com">aioapp.helpdesk@gmail.com</a></p>
+    <p>Пишите по любым вопросам - поможем оперативно.</p>
+  </section>
+
   <footer>
     © 2025 AIO Chat. Все права защищены.
   </footer>
+
+  <div class="fullscreen-image" id="fullscreen-image">
+    <button class="close-btn" onclick="closeFullscreen()">×</button>
+    <img src="" alt="Full Screen Image">
+  </div>
 
   <script>
     let currentSlide = 0;
@@ -392,8 +438,8 @@
 
     function moveCarousel(direction) {
       currentSlide += direction * slidesPerRow;
-      if (currentSlide < 0) currentSlide = 0;
-      if (currentSlide >= totalSlides) currentSlide = totalSlides - (totalSlides % slidesPerRow || slidesPerRow);
+      if (currentSlide < 0) currentSlide = totalSlides - slidesPerRow; // Круговое перелистывание влево
+      if (currentSlide >= totalSlides) currentSlide = 0; // Круговое перелистывание вправо
       updateCarousel();
     }
 
@@ -410,7 +456,22 @@
     // Инициализация
     document.addEventListener('DOMContentLoaded', () => {
       updateCarousel();
+      slides.forEach(img => {
+        img.addEventListener('click', () => openFullscreen(img.src));
+      });
     });
+
+    function openFullscreen(src) {
+      const fullscreen = document.getElementById('fullscreen-image');
+      const fullscreenImg = fullscreen.querySelector('img');
+      fullscreenImg.src = src;
+      fullscreen.style.display = 'flex';
+    }
+
+    function closeFullscreen() {
+      const fullscreen = document.getElementById('fullscreen-image');
+      fullscreen.style.display = 'none';
+    }
 
     $(document).ready(function() {
       $(".carousel-inner").swipe({
