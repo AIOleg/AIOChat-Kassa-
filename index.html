@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AIO Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
   <style>
@@ -16,136 +16,236 @@
       font-family: 'Inter', sans-serif;
     }
     body {
-      background: linear-gradient(145deg, #f0f0f3, #dcdde1);
-      color: #333;
+      background: linear-gradient(145deg, #f5f6f5, #e3e4e8);
+      color: #1a1a1a;
       line-height: 1.6;
       scroll-behavior: smooth;
     }
     header {
-      padding: 2rem 1rem 1rem;
+      padding: 1.5rem 1rem;
       text-align: center;
       font-size: 2rem;
       font-weight: 600;
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.3);
       position: sticky;
       top: 0;
       z-index: 999;
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
     nav {
       display: flex;
       justify-content: center;
-      gap: 1.2rem;
-      margin-top: 0.25rem;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
       flex-wrap: wrap;
-      font-size: 0.875rem;
-      font-weight: 400;
-      opacity: 0.8;
+      font-size: 0.9rem;
+      font-weight: 500;
     }
     nav a {
       text-decoration: none;
-      color: #333;
-      transition: opacity 0.3s ease;
+      color: #1a1a1a;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      transition: transform 0.3s ease, color 0.3s ease, background 0.3s ease;
     }
     nav a:hover {
-      opacity: 1;
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      color: #000;
     }
     section {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 2rem auto;
       padding: 2rem;
-      background: rgba(255,255,255,0.7);
-      border-radius: 20px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(12px);
       transition: transform 0.3s ease;
     }
     section:hover {
-      transform: scale(1.01);
+      transform: translateY(-2px);
     }
     h2 {
       font-size: 1.8rem;
-      margin-bottom: 1rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #1a1a1a;
     }
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
     .feature-item {
-      text-align: left;
-      padding: 1rem;
+      display: flex;
+      align-items: flex-start;
+      padding: 1.5rem;
       background: rgba(255, 255, 255, 0.5);
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      transition: background 0.3s ease;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      transition: background 0.3s ease, transform 0.3s ease;
     }
     .feature-item:hover {
       background: rgba(255, 255, 255, 0.7);
+      transform: translateY(-2px);
+    }
+    .feature-item img {
+      width: 40px;
+      height: 40px;
+      margin-right: 1rem;
     }
     .feature-item h3 {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
     .feature-item p {
       font-size: 0.95rem;
-      color: #444;
+      color: #333;
     }
     .screenshots {
       margin-top: 2rem;
       position: relative;
-      max-width: 400px; /* Уменьшен для 13-дюймового экрана */
+      max-width: 600px; /* Соответствует нижней рамке "Подписка" */
       margin-left: auto;
       margin-right: auto;
+      margin-bottom: 2rem;
     }
     .carousel {
       overflow: hidden;
+      border-radius: 12px;
+      position: relative;
     }
     .carousel-inner {
       display: flex;
-      transition: transform 0.5s ease;
+      flex-direction: row;
+      transition: transform 0.5s ease-in-out; /* Плавное перелистывание */
     }
     .carousel-inner img {
       width: 100%;
-      flex: 0 0 100%;
-      max-width: 400px; /* Ограничение ширины изображения */
+      max-width: 600px;
       height: auto;
       border-radius: 12px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-right: 15px; /* Увеличенный отступ для веера */
+      transform: translateZ(0) rotate(0deg); /* Базовое положение */
+      backdrop-filter: blur(8px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Анимация при наведении */
+    }
+    /* Эффект веера: наклон и смещение */
+    .carousel-inner img:nth-child(1) {
+      transform: translateZ(0) rotate(0deg) translateX(0);
+      z-index: 7;
+    }
+    .carousel-inner img:nth-child(2) {
+      transform: translateZ(0) rotate(-2deg) translateX(-10px);
+      z-index: 6;
+    }
+    .carousel-inner img:nth-child(3) {
+      transform: translateZ(0) rotate(-4deg) translateX(-20px);
+      z-index: 5;
+    }
+    .carousel-inner img:nth-child(4) {
+      transform: translateZ(0) rotate(-6deg) translateX(-30px);
+      z-index: 4;
+    }
+    .carousel-inner img:nth-child(5) {
+      transform: translateZ(0) rotate(-8deg) translateX(-40px);
+      z-index: 3;
+    }
+    .carousel-inner img:nth-child(6) {
+      transform: translateZ(0) rotate(-10deg) translateX(-50px);
+      z-index: 2;
+    }
+    .carousel-inner img:nth-child(7) {
+      transform: translateZ(0) rotate(-12deg) translateX(-60px);
+      z-index: 1;
+    }
+    .carousel-inner img:hover {
+      transform: scale(1.05) rotate(0deg) !important; /* Увеличение при наведении, сброс поворота */
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+      z-index: 10;
     }
     .carousel-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.4);
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       color: #000;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       cursor: pointer;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       transition: background 0.3s ease, transform 0.3s ease;
-      z-index: 10; /* Убедимся, что кнопки поверх изображения */
+      z-index: 10;
     }
     .carousel-btn:hover {
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.6);
       transform: translateY(-50%) scale(1.1);
     }
     .prev {
-      left: 10px;
+      left: 0;
     }
     .next {
-      right: 10px;
+      right: 0;
     }
-    @media (max-width: 768px) {
-      .carousel-inner img {
-        max-width: 300px; /* Уменьшен размер для мобильных */
-      }
+    .subscription-details {
+      display: block;
+      text-align: left;
+      margin-left: 0;
+      margin-top: 1.5rem;
+    }
+    .subscription-details p {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .subscription-details ul {
+      list-style: none;
+      padding: 0;
+    }
+    .subscription-details ul li {
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+    .subscription-details ul li:before {
+      content: '-';
+      position: absolute;
+      left: 0;
+      color: #1a1a1a;
+      font-size: 1.2rem;
+    }
+    .download {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .download a {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 12px;
+      text-decoration: none;
+      color: #1a1a1a;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .download a:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.6);
     }
     .contact {
       text-align: center;
@@ -154,14 +254,37 @@
     }
     .contact a {
       text-decoration: none;
-      color: #333;
-      cursor: pointer;
+      color: #1a1a1a;
+      font-weight: 500;
     }
     footer {
       text-align: center;
       padding: 1rem;
       font-size: 0.85rem;
-      opacity: 0.6;
+      color: #666;
+    }
+    @media (max-width: 768px) {
+      .carousel-inner img {
+        max-width: 320px;
+      }
+      .screenshots {
+        max-width: 320px;
+      }
+      section {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+      .download {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .download a {
+        width: 80%;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -172,42 +295,61 @@
       <a href="#description">Описание</a>
       <a href="#features">Возможности</a>
       <a href="#subscription">Подписка</a>
-      <a href="#registration">Навигация</a>
+      <a href="#registration">Удобная регистрация</a>
       <a href="#contacts">Контакты</a>
+      <a href="#download">Скачать</a>
     </nav>
   </header>
 
   <section id="description">
     <h2>Описание приложения</h2>
-    <p><strong>AIO Chat</strong> — интеллектуальное AI-приложение для iOS, Android и десктопной веб-версии, которое помогает в учебе, работе и творчестве.</p>
+    <p><strong>AIO Chat</strong> - это не просто чат, это интеллектуальный помощник. Простой, но мощный. С интуитивным интерфейсом и современными возможностями на базе ИИ. AIO Chat создан для того, чтобы делать сложное - легко. Общение, генерация изображений, озвучка текста и помощь в учёбе - всё это в пару касаний.</p>
   </section>
 
   <section id="features">
     <h2>Что умеет AIO Chat</h2>
     <div class="features">
       <div class="feature-item">
-        <h3>Графика</h3>
-        <p>Генерация логотипов и изображений</p>
+        <img src="images/graphics-icon.png" alt="Иконка Графика">
+        <div>
+          <h3>Графика</h3>
+          <p>Генерация логотипов и изображений</p>
+        </div>
       </div>
       <div class="feature-item">
-        <h3>Учёба</h3>
-        <p>Автоматическое создание докладов, решение задач</p>
+        <img src="images/study-icon.png" alt="Иконка Учёба">
+        <div>
+          <h3>Учёба</h3>
+          <p>Автоматическое создание докладов, решение задач</p>
+        </div>
       </div>
       <div class="feature-item">
-        <h3>Аудио</h3>
-        <p>Озвучка текста, голосовой ввод</p>
+        <img src="images/audio-icon.png" alt="Иконка Аудио">
+        <div>
+          <h3>Аудио</h3>
+          <p>Озвучка текста, голосовой ввод</p>
+        </div>
       </div>
       <div class="feature-item">
-        <h3>Контент</h3>
-        <p>Генератор идей, переформулировка и редактор текстов</p>
+        <img src="images/content-icon.png" alt="Иконка Контент">
+        <div>
+          <h3>Контент</h3>
+          <p>Генератор идей, переформулировка и редактор текстов</p>
+        </div>
       </div>
       <div class="feature-item">
-        <h3>Работа</h3>
-        <p>Создание резюме, бизнес-планов, автоисправление кода</p>
+        <img src="images/work-icon.png" alt="Иконка Работа">
+        <div>
+          <h3>Работа</h3>
+          <p>Создание резюме, бизнес-планов, автоисправление кода</p>
+        </div>
       </div>
       <div class="feature-item">
-        <h3>Чат</h3>
-        <p>Интерактивный "Чат с НейроОлегом"</p>
+        <img src="images/chat-icon.png" alt="Иконка Чат">
+        <div>
+          <h3>Чат</h3>
+          <p>Интерактивный "Чат с НейроОлегом"</p>
+        </div>
       </div>
     </div>
 
@@ -218,6 +360,10 @@
           <img src="images/screenshot1.jpg" alt="Экран 1">
           <img src="images/screenshot2.jpg" alt="Экран 2">
           <img src="images/screenshot3.jpg" alt="Экран 3">
+          <img src="images/screenshot4.jpg" alt="Экран 4">
+          <img src="images/screenshot5.jpg" alt="Экран 5">
+          <img src="images/screenshot6.jpg" alt="Экран 6">
+          <img src="images/screenshot7.jpg" alt="Экран 7">
         </div>
         <button class="carousel-btn next" onclick="moveCarousel(1)">❯</button>
       </div>
@@ -226,21 +372,40 @@
 
   <section id="subscription">
     <h2>Подписка</h2>
-    <p>3 дня бесплатного пробного периода</p>
-    <p>Подписки: 1 месяц / 3 месяца / 1 год</p>
-    <p>Преимущества подписки: отсутствие рекламы, быстрые ответы</p>
-  </section>
-
-  <section id="registration">
-    <h2>Регистрация</h2>
-    <div style="list-style-type: none;"> <!-- Убираем точки -->
-      <div>Вход и регистрация через Apple, Google, Яндекс и Email</div>
+    <div class="subscription-details">
+      <p>Оформи подписку и получи бесплатный пробный период на 3 дня, чтобы оценить все преимущества без риска.</p>
+      <p>Выбери удобный для себя срок:</p>
+      <ul>
+        <li>1 месяц — гибкий вариант для краткосрочного использования.</li>
+        <li>3 месяца — выгоднее, чем оплачивать каждый месяц отдельно.</li>
+        <li>1 год — максимальная экономия и стабильный доступ на целый год.</li>
+      </ul>
+      <p>Что дает подписка:</p>
+      <ul>
+        <li>Без рекламы — ничего не отвлекает от работы и общения.</li>
+        <li>Мгновенные ответы — приоритетная скорость обработки запросов.</li>
+        <li>Полный доступ ко всем функциям — наслаждайся сервисом на максимум!</li>
+      </ul>
     </div>
   </section>
 
-  <section class="contact" id="contacts">
+  <section id="registration">
+    <h2>Удобная регистрация</h2>
+    <p>Доступен вход или регистрация через сервисы Apple, Google, Яндекс и Email</p>
+  </section>
+
+  <section id="contacts">
     <h2>Контакты</h2>
-    <p>Поддержка по почте: <a href="mailto:aioapp.helpdesk@gmail.com">aioapp.helpdesk@gmail.com</a></p>
+    <p><a href="mailto:aioapp.helpdesk@gmail.com">aioapp.helpdesk@gmail.com</a></p>
+    <p>Пишите по любым вопросам — поможем оперативно.</p>
+  </section>
+
+  <section id="download">
+    <h2>Доступно для укачивания</h2>
+    <div class="download">
+      <a href="#">Скачать для iOS</a>
+      <a href="#">Скачать для Android</a>
+    </div>
   </section>
 
   <footer>
@@ -251,6 +416,7 @@
     let currentSlide = 0;
     const slides = document.querySelectorAll('.carousel-inner img');
     const totalSlides = slides.length;
+    const slideWidth = slides[0].clientWidth + 15; // Учитываем margin-right для веера
 
     function moveCarousel(direction) {
       currentSlide += direction;
@@ -260,16 +426,25 @@
     }
 
     function updateCarousel() {
-      const offset = -currentSlide * 100;
-      document.querySelector('.carousel-inner').style.transform = `translateX(${offset}%)`;
+      const offset = -currentSlide * slideWidth;
+      document.querySelector('.carousel-inner').style.transform = `translateX(${offset}px)`;
     }
 
-    // Добавление свайпов
+    // Обновление при изменении размера окна
+    window.addEventListener('resize', () => {
+      updateCarousel();
+    });
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCarousel();
+    });
+
     $(document).ready(function() {
       $(".carousel-inner").swipe({
         swipeLeft: function() { moveCarousel(1); },
         swipeRight: function() { moveCarousel(-1); },
-        threshold: 50 // Чувствительность свайпа
+        threshold: 50
       });
     });
   </script>
