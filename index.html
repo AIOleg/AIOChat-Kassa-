@@ -186,6 +186,19 @@
       align-items: center;
       cursor: pointer;
     }
+    .fullscreen-image {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
     .fullscreen-image img {
       max-width: 85%;
       max-height: 85%;
@@ -552,7 +565,7 @@
   <section id="download">
     <h2>Доступно для cкачивания</h2>
     <div class="download">
-      <a href="#">Скачать для iOS</a>
+      <a href="https://apps.apple.com/ru/app/aio-chat/id6636481876">Скачать для iOS</a>
       <a href="#">Скачать для Android</a>
     </div>
   </section>
@@ -572,10 +585,17 @@
     let currentSlide = 0;
     const slides = document.querySelectorAll('.carousel-inner img');
     const totalSlides = slides.length;
-    const slidesPerRow = 4;
     let slideWidth = slides[0] ? slides[0].clientWidth + 8 : 200;
     let currentFullscreenIndex = 0;
     let isTransitioning = false;
+
+    function preloadImages() {
+      const imageSources = Array.from(slides).map(slide => slide.src);
+      imageSources.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+    }
 
     function initializeCarousel() {
       const carouselInner = document.querySelector('.carousel-inner');
@@ -586,7 +606,7 @@
         carouselInner.appendChild(firstClone);
         carouselInner.insertBefore(lastClone, carouselInner.firstChild);
       }
-      // Set initial position to show first image
+      // Set initial position to show first image (screenshot1.jpg)
       currentSlide = totalSlides;
       updateCarousel(false);
       // Add click listeners for fullscreen
@@ -597,6 +617,8 @@
           openFullscreen(slides[currentFullscreenIndex].src);
         });
       });
+      // Preload images
+      preloadImages();
     }
 
     function moveCarousel(direction) {
