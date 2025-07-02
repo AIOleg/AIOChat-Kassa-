@@ -96,8 +96,8 @@
       transform: translateY(-2px);
     }
     .feature-item img {
-      width: 32px;
-      height: 32px;
+      width: 48px; /* Увеличено с 32px до 48px (в 1.5 раза) */
+      height: 48px; /* Увеличено с 32px до 48px (в 1.5 раза) */
       margin-right: 0.8rem;
     }
     .feature-item h3 {
@@ -344,8 +344,8 @@
         padding: 0.8rem;
       }
       .feature-item img {
-        width: 28px;
-        height: 28px;
+        width: 42px; /* Уменьшено с 48px для адаптивности, но больше 28px */
+        height: 42px; /* Уменьшено с 48px для адаптивности, но больше 28px */
       }
       .feature-item h3 {
         font-size: 1rem;
@@ -427,6 +427,10 @@
       }
       h2 {
         font-size: 1.2rem;
+      }
+      .feature-item img {
+        width: 36px; /* Дополнительное уменьшение для маленьких экранов */
+        height: 36px; /* Дополнительное уменьшение для маленьких экранов */
       }
       .carousel-inner img {
         max-width: 120px;
@@ -571,8 +575,8 @@
   <script>
     let currentSlide = 0;
     let slides = [];
-    const totalSlides = 7; // Фиксированное количество слайдов
-    let slideWidth = 200; // Начальное значение, обновляется динамически
+    const totalSlides = 7;
+    let slideWidth = 200;
     let currentFullscreenIndex = 0;
     let isTransitioning = false;
 
@@ -598,23 +602,22 @@
           img.onerror = () => {
             console.error(`Ошибка загрузки изображения: ${src}`);
             loadedCount++;
-            if (loadedCount === imageSources.length) resolve(); // Продолжаем даже при ошибках
+            if (loadedCount === imageSources.length) resolve();
           };
         });
-        setTimeout(() => resolve(), 5000); // Таймаут 5 секунд
+        setTimeout(() => resolve(), 5000);
       });
     }
 
     async function initializeCarousel() {
       try {
-        await preloadImages(); // Ожидаем загрузки всех изображений
+        await preloadImages();
         const carouselInner = document.querySelector('.carousel-inner');
         if (!carouselInner) {
           console.error('Элемент .carousel-inner не найден');
           return;
         }
 
-        // Удаляем существующие слайды и добавляем в правильном порядке
         carouselInner.innerHTML = '';
         const imageSources = [
           '/images/screenshot1.jpg',
@@ -630,10 +633,9 @@
           img.src = src;
           img.alt = `Экран ${index + 1}`;
           carouselInner.appendChild(img);
-          slides.push(img); // Обновляем массив слайдов
+          slides.push(img);
         });
 
-        // Добавляем клоны для бесшовного цикла
         for (let i = 0; i < totalSlides; i++) {
           const firstClone = slides[i].cloneNode(true);
           const lastClone = slides[totalSlides - 1 - i].cloneNode(true);
@@ -641,12 +643,10 @@
           carouselInner.insertBefore(lastClone, carouselInner.firstChild);
         }
 
-        // Устанавливаем начальную позицию на screenshot1.jpg
         currentSlide = totalSlides;
         slideWidth = slides[0] ? slides[0].clientWidth + 8 : 200;
         updateCarousel(false);
 
-        // Добавляем слушатели для полноэкранного режима
         document.querySelectorAll('.carousel-inner img').forEach((img, index) => {
           img.addEventListener('click', () => {
             currentFullscreenIndex = (index - totalSlides) % totalSlides;
