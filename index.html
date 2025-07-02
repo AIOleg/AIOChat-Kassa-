@@ -459,42 +459,42 @@
     <h2>Что умеет AIO Chat</h2>
     <div class="features">
       <div class="feature-item">
-        <img src="images/graphics-icon.png" alt="Иконка Графика">
+        <img src="/images/graphics-icon.png" alt="Иконка Графика">
         <div>
           <h3>Графика</h3>
           <p>Генерация логотипов и изображений</p>
         </div>
       </div>
       <div class="feature-item">
-        <img src="images/study-icon.png" alt="Иконка Учёба">
+        <img src="/images/study-icon.png" alt="Иконка Учёба">
         <div>
           <h3>Учёба</h3>
           <p>Автоматическое создание докладов, решение задач</p>
         </div>
       </div>
       <div class="feature-item">
-        <img src="images/audio-icon.png" alt="Иконка Аудио">
+        <img src="/images/audio-icon.png" alt="Иконка Аудио">
         <div>
           <h3>Аудио</h3>
           <p>Озвучка текста, голосовой ввод</p>
         </div>
       </div>
       <div class="feature-item">
-        <img src="images/content-icon.png" alt="Иконка Контент">
+        <img src="/images/content-icon.png" alt="Иконка Контент">
         <div>
           <h3>Контент</h3>
           <p>Генератор идей, переформулировка и редактор текстов</p>
         </div>
       </div>
       <div class="feature-item">
-        <img src="images/work-icon.png" alt="Иконка Работа">
+        <img src="/images/work-icon.png" alt="Иконка Работа">
         <div>
           <h3>Работа</h3>
           <p>Создание резюме, бизнес-планов, автоисправление кода</p>
         </div>
       </div>
       <div class="feature-item">
-        <img src="images/chat-icon.png" alt="Иконка Чат">
+        <img src="/images/chat-icon.png" alt="Иконка Чат">
         <div>
           <h3>Чат</h3>
           <p>Интерактивный "Чат с НейроОлегом"</p>
@@ -506,13 +506,13 @@
       <div class="carousel">
         <button class="carousel-btn prev" onclick="moveCarousel(-1)">❮</button>
         <div class="carousel-inner">
-          <img src="./images/screenshot1.jpg" alt="Экран 1">
-          <img src="./images/screenshot2.jpg" alt="Экран 2">
-          <img src="./images/screenshot3.jpg" alt="Экран 3">
-          <img src="./images/screenshot4.jpg" alt="Экран 4">
-          <img src="./images/screenshot5.jpg" alt="Экран 5">
-          <img src="./images/screenshot6.jpg" alt="Экран 6">
-          <img src="./images/screenshot7.jpg" alt="Экран 7">
+          <img src="/images/screenshot1.jpg" alt="Экран 1">
+          <img src="/images/screenshot2.jpg" alt="Экран 2">
+          <img src="/images/screenshot3.jpg" alt="Экран 3">
+          <img src="/images/screenshot4.jpg" alt="Экран 4">
+          <img src="/images/screenshot5.jpg" alt="Экран 5">
+          <img src="/images/screenshot6.jpg" alt="Экран 6">
+          <img src="/images/screenshot7.jpg" alt="Экран 7">
         </div>
         <button class="carousel-btn next" onclick="moveCarousel(1)">❯</button>
       </div>
@@ -570,17 +570,25 @@
 
   <script>
     let currentSlide = 0;
-    const slides = document.querySelectorAll('.carousel-inner img');
-    const totalSlides = slides.length;
-    let slideWidth = slides[0] ? slides[0].clientWidth + 8 : 200;
+    let slides = [];
+    const totalSlides = 7; // Фиксированное количество слайдов
+    let slideWidth = 200; // Начальное значение, обновляется динамически
     let currentFullscreenIndex = 0;
     let isTransitioning = false;
 
     function preloadImages() {
       return new Promise((resolve, reject) => {
-        const imageSources = Array.from(slides).map(slide => slide.src);
+        const imageSources = [
+          '/images/screenshot1.jpg',
+          '/images/screenshot2.jpg',
+          '/images/screenshot3.jpg',
+          '/images/screenshot4.jpg',
+          '/images/screenshot5.jpg',
+          '/images/screenshot6.jpg',
+          '/images/screenshot7.jpg'
+        ];
         let loadedCount = 0;
-        imageSources.forEach(src => {
+        imageSources.forEach((src, index) => {
           const img = new Image();
           img.src = src;
           img.onload = () => {
@@ -593,8 +601,7 @@
             if (loadedCount === imageSources.length) resolve(); // Продолжаем даже при ошибках
           };
         });
-        // Таймаут на случай, если изображения не загружаются
-        setTimeout(() => resolve(), 5000); // 5 секунд максимум
+        setTimeout(() => resolve(), 5000); // Таймаут 5 секунд
       });
     }
 
@@ -606,6 +613,26 @@
           console.error('Элемент .carousel-inner не найден');
           return;
         }
+
+        // Удаляем существующие слайды и добавляем в правильном порядке
+        carouselInner.innerHTML = '';
+        const imageSources = [
+          '/images/screenshot1.jpg',
+          '/images/screenshot2.jpg',
+          '/images/screenshot3.jpg',
+          '/images/screenshot4.jpg',
+          '/images/screenshot5.jpg',
+          '/images/screenshot6.jpg',
+          '/images/screenshot7.jpg'
+        ];
+        imageSources.forEach((src, index) => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = `Экран ${index + 1}`;
+          carouselInner.appendChild(img);
+          slides.push(img); // Обновляем массив слайдов
+        });
+
         // Добавляем клоны для бесшовного цикла
         for (let i = 0; i < totalSlides; i++) {
           const firstClone = slides[i].cloneNode(true);
@@ -613,9 +640,12 @@
           carouselInner.appendChild(firstClone);
           carouselInner.insertBefore(lastClone, carouselInner.firstChild);
         }
+
         // Устанавливаем начальную позицию на screenshot1.jpg
         currentSlide = totalSlides;
+        slideWidth = slides[0] ? slides[0].clientWidth + 8 : 200;
         updateCarousel(false);
+
         // Добавляем слушатели для полноэкранного режима
         document.querySelectorAll('.carousel-inner img').forEach((img, index) => {
           img.addEventListener('click', () => {
@@ -635,7 +665,6 @@
       currentSlide += direction;
       updateCarousel(true);
 
-      // Обработка перехода через клоны
       if (currentSlide >= totalSlides * 2) {
         setTimeout(() => {
           currentSlide = currentSlide - totalSlides;
