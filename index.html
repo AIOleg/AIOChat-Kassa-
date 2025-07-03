@@ -517,13 +517,13 @@
       <div class="carousel">
         <button class="carousel-btn prev" onclick="moveCarousel(-1)">❮</button>
         <div class="carousel-inner">
-          <img src="/images/screenshot1.jpg" alt="Экран 1" loading="lazy">
-          <img src="/images/screenshot2.jpg" alt="Экран 2" loading="lazy">
-          <img src="/images/screenshot3.jpg" alt="Экран 3" loading="lazy">
-          <img src="/images/screenshot4.jpg" alt="Экран 4" loading="lazy">
-          <img src="/images/screenshot5.jpg" alt="Экран 5" loading="lazy">
-          <img src="/images/screenshot6.jpg" alt="Экран 6" loading="lazy">
-          <img src="/images/screenshot7.jpg" alt="Экран 7" loading="lazy">
+          <img src="/images/screenshot1.jpg" alt="Экран 1">
+          <img src="/images/screenshot2.jpg" alt="Экран 2">
+          <img src="/images/screenshot3.jpg" alt="Экран 3">
+          <img src="/images/screenshot4.jpg" alt="Экран 4">
+          <img src="/images/screenshot5.jpg" alt="Экран 5">
+          <img src="/images/screenshot6.jpg" alt="Экран 6">
+          <img src="/images/screenshot7.jpg" alt="Экран 7">
         </div>
         <button class="carousel-btn next" onclick="moveCarousel(1)">❯</button>
       </div>
@@ -599,7 +599,7 @@
           '/images/screenshot7.jpg'
         ];
         let loadedCount = 0;
-        imageSources.forEach((src, index) => {
+        imageSources.forEach((src) => {
           const img = new Image();
           img.src = src;
           img.onload = () => {
@@ -612,13 +612,13 @@
             if (loadedCount === imageSources.length) resolve();
           };
         });
-        setTimeout(() => resolve(), 5000);
+        setTimeout(() => resolve(), 5000); // Тайм-аут на случай ошибок
       });
     }
 
     async function initializeCarousel() {
       try {
-        await preloadImages();
+        await preloadImages(); // Предзагрузка всех изображений
         const carouselInner = document.querySelector('.carousel-inner');
         if (!carouselInner) {
           console.error('Элемент .carousel-inner не найден');
@@ -639,7 +639,6 @@
           const img = document.createElement('img');
           img.src = src;
           img.alt = `Экран ${index + 1}`;
-          img.loading = "lazy";
           carouselInner.appendChild(img);
           slides.push(img);
         });
