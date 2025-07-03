@@ -6,13 +6,17 @@
   <title>AIO Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/images/android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/images/android-chrome-512x512.png">
-  <link rel="manifest" href="/images/site.webmanifest">
+  <!-- Основной favicon -->
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico?v=2">
+  <!-- Разные размеры для лучшей поддержки -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=2">
+  <!-- Apple Touch Icon для Safari -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=2">
+  <link rel="apple-touch-icon" sizes="192x192" href="/images/android-chrome-192x192.png?v=2">
+  <link rel="apple-touch-icon" sizes="512x512" href="/images/android-chrome-512x512.png?v=2">
+  <!-- Web Manifest -->
+  <link rel="manifest" href="/images/site.webmanifest?v=2">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
   <style>
@@ -147,6 +151,11 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
       flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .carousel-inner img.loaded {
+      opacity: 1;
     }
     .carousel-inner img:hover {
       transform: scale(1.05);
@@ -514,7 +523,7 @@
     </div>
 
     <div class="screenshots">
-      <div class="carousel">
+      <div class="carousel" style="display: none;" id="carousel">
         <button class="carousel-btn prev" onclick="moveCarousel(-1)">❮</button>
         <div class="carousel-inner">
           <img src="/images/screenshot1.jpg" alt="Экран 1">
@@ -612,13 +621,13 @@
             if (loadedCount === imageSources.length) resolve();
           };
         });
-        setTimeout(() => resolve(), 5000); // Тайм-аут на случай ошибок
+        setTimeout(() => resolve(), 5000);
       });
     }
 
     async function initializeCarousel() {
       try {
-        await preloadImages(); // Предзагрузка всех изображений
+        await preloadImages();
         const carouselInner = document.querySelector('.carousel-inner');
         if (!carouselInner) {
           console.error('Элемент .carousel-inner не найден');
@@ -639,6 +648,7 @@
           const img = document.createElement('img');
           img.src = src;
           img.alt = `Экран ${index + 1}`;
+          img.onload = () => img.classList.add('loaded');
           carouselInner.appendChild(img);
           slides.push(img);
         });
@@ -650,17 +660,23 @@
           carouselInner.insertBefore(lastClone, carouselInner.firstChild);
         }
 
-        currentSlide = totalSlides;
-        slideWidth = slides[0] ? slides[0].clientWidth + 8 : 200;
-        updateCarousel(false);
-
-        document.querySelectorAll('.carousel-inner img').forEach((img, index) => {
-          img.addEventListener('click', () => {
-            currentFullscreenIndex = (index - totalSlides) % totalSlides;
-            if (currentFullscreenIndex < 0) currentFullscreenIndex += totalSlides;
-            openFullscreen(slides[currentFullscreenIndex].src);
-          });
-        });
+        const allLoaded = () => slides.every(img => img.complete && img.naturalHeight !== 0);
+        const checkLoad = setInterval(() => {
+          if (allLoaded()) {
+            clearInterval(checkLoad);
+            currentSlide = totalSlides;
+            slideWidth = slides[0] ? slides[0].clientWidth + 8 : 200;
+            updateCarousel(false);
+            document.querySelector('#carousel').style.display = 'block';
+            document.querySelectorAll('.carousel-inner img').forEach((img, index) => {
+              img.addEventListener('click', () => {
+                currentFullscreenIndex = (index - totalSlides) % totalSlides;
+                if (currentFullscreenIndex < 0) currentFullscreenIndex += totalSlides;
+                openFullscreen(slides[currentFullscreenIndex].src);
+              });
+            });
+          }
+        }, 100);
       } catch (error) {
         console.error('Ошибка инициализации карусели:', error);
       }
