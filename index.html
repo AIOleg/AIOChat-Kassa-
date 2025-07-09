@@ -134,6 +134,9 @@
       flex-direction: row;
       transition: transform 0.5s ease-in-out;
       width: fit-content;
+      will-change: transform;
+      backface-visibility: hidden;
+      transform: translateZ(0);
     }
     .carousel-inner img {
       width: 100%;
@@ -143,7 +146,6 @@
       box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
       margin-right: 8px;
       transform: translateZ(0);
-      backdrop-filter: blur(8px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
       flex-shrink: 0;
@@ -359,6 +361,7 @@
       }
       .feature-item p {
         font-size: 0.85rem;
+      
       }
       .carousel-inner img {
         max-width: 150px;
@@ -517,13 +520,13 @@
       <div class="carousel">
         <button class="carousel-btn prev" onclick="moveCarousel(-1)">❮</button>
         <div class="carousel-inner">
-          <img src="/images/screenshot1.jpg" alt="Экран 1">
-          <img src="/images/screenshot2.jpg" alt="Экран 2">
-          <img src="/images/screenshot3.jpg" alt="Экран 3">
-          <img src="/images/screenshot4.jpg" alt="Экран 4">
-          <img src="/images/screenshot5.jpg" alt="Экран 5">
-          <img src="/images/screenshot6.jpg" alt="Экран 6">
-          <img src="/images/screenshot7.jpg" alt="Экран 7">
+          <img src="/images/screenshot1.jpg" alt="Экран 1" loading="eager" decoding="async">
+          <img src="/images/screenshot2.jpg" alt="Экран 2" loading="eager" decoding="async">
+          <img src="/images/screenshot3.jpg" alt="Экран 3" loading="eager" decoding="async">
+          <img src="/images/screenshot4.jpg" alt="Экран 4" loading="eager" decoding="async">
+          <img src="/images/screenshot5.jpg" alt="Экран 5" loading="eager" decoding="async">
+          <img src="/images/screenshot6.jpg" alt="Экран 6" loading="eager" decoding="async">
+          <img src="/images/screenshot7.jpg" alt="Экран 7" loading="eager" decoding="async">
         </div>
         <button class="carousel-btn next" onclick="moveCarousel(1)">❯</button>
       </div>
