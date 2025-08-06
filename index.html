@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AIO Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https(Custom)https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -83,6 +83,12 @@
       margin-bottom: 1rem;
       color: #1a1a1a;
       padding-top: 0.5rem;
+    }
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: #1a1a1a;
     }
     .features {
       display: grid;
@@ -278,13 +284,13 @@
       color: #1a1a1a;
       font-size: 1rem;
     }
-    .download {
+    .download, .subscribe {
       display: flex;
       justify-content: center;
       gap: 1rem;
       margin-top: 1rem;
     }
-    .download a {
+    .download a, .subscribe a {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -300,7 +306,7 @@
       text-align: center;
       min-width: 200px;
     }
-    .download a:hover {
+    .download a:hover, .subscribe a:hover {
       transform: translateY(-2px);
       background: rgba(255, 255, 255, 0.6);
     }
@@ -319,6 +325,15 @@
       padding: 0.8rem;
       font-size: 0.8rem;
       color: #666;
+    }
+    footer a {
+      text-decoration: none;
+      color: #1a1a1a;
+      font-weight: 500;
+      margin: 0 0.5rem;
+    }
+    footer a:hover {
+      color: #000;
     }
     @media (max-width: 768px) {
       header {
@@ -345,6 +360,9 @@
         font-size: 1.4rem;
         padding-top: 0.4rem;
       }
+      h3 {
+        font-size: 1.2rem;
+      }
       .features {
         grid-template-columns: 1fr;
         gap: 0.8rem;
@@ -361,7 +379,6 @@
       }
       .feature-item p {
         font-size: 0.85rem;
-      
       }
       .carousel-inner img {
         max-width: 150px;
@@ -400,11 +417,11 @@
         font-size: 0.85rem;
         padding-left: 1rem;
       }
-      .download {
+      .download, .subscribe {
         flex-direction: column;
         gap: 0.8rem;
       }
-      .download a {
+      .download a, .subscribe a {
         min-width: 90%;
         padding: 0.5rem 1rem;
         display: flex;
@@ -445,7 +462,7 @@
       .carousel-inner img {
         max-width: 120px;
       }
-      .download a {
+      .download a, .subscribe a {
         min-width: 100%;
       }
     }
@@ -539,16 +556,20 @@
       <p>Оформи премиум и получи бесплатный пробный период, чтобы оценить все преимущества без риска.</p>
       <p>Выбери удобный для себя срок:</p>
       <ul>
-        <li>1 месяц - гибкий вариант для краткосрочного использования.</li>
-        <li>3 месяца -  разумный выбор для продолжительного использования.</li>
-        <li>1 год - максимальная экономия и стабильный доступ на целый год.</li>
+        <li>3 дня — 0 руб (бесплатный пробный период)</li>
+        <li>1 месяц — 399 руб</li>
+        <li>3 месяца — 1099 руб</li>
+        <li>1 год — 4099 руб (максимальная экономия)</li>
       </ul>
       <p>Что дает премиум:</p>
       <ul>
-        <li>Без рекламы - ничего не отвлекает от работы и общения.</li>
-        <li>Мгновенные ответы - приоритетная скорость обработки запросов.</li>
-        <li>Полный доступ ко всем функциям - наслаждайся сервисом на максимум!</li>
+        <li>Без рекламы — ничего не отвлекает от работы и общения.</li>
+        <li>Мгновенные ответы — приоритетная скорость обработки запросов.</li>
+        <li>Полный доступ ко всем функциям — наслаждайся сервисом на максимум!</li>
       </ul>
+    </div>
+    <div class="subscribe">
+      <a href="[ссылка на платежную форму ЮKassa]">Оформить подписку</a>
     </div>
   </section>
 
@@ -559,8 +580,12 @@
 
   <section id="contacts">
     <h2>Контакты</h2>
-    <p><a href="mailto:aioapp.helpdesk@gmail.com">aioapp.helpdesk@gmail.com</a></p>
-    <p>Пишите по любым вопросам - поможем оперативно.</p>
+    <div class="contact">
+      <p><a href="mailto:aioapp.helpdesk@gmail.com">aioapp.helpdesk@gmail.com</a></p>
+      <p>Пишите по любым вопросам — поможем оперативно.</p>
+      <h3>Реквизиты</h3>
+      <p>ИП Захарин Олег Сергеевич</p>
+    </div>
   </section>
 
   <section id="download">
@@ -573,6 +598,8 @@
 
   <footer>
     © 2025 AIO Chat. Все права защищены.
+    <a href="https://drive.google.com/file/d/19mAYQMo1W09UYsm0GfigsnLacwBEkAOU/view?usp=sharing" target="_blank">Пользовательское соглашение</a>
+    <a href="https://drive.google.com/file/d/19mAYQMo1W09UYsm0GfigsnLacwBEkAOU/view?usp=sharing" target="_blank">Политика конфиденциальности</a>
   </footer>
 
   <div class="fullscreen-image" id="fullscreen-image">
